@@ -1,10 +1,7 @@
 package org.launchcode.hellospring.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by CF
@@ -12,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * This is a request handler
  */
 @Controller
+@ResponseBody
+@RequestMapping("hello")
 public class HelloController {
 
     /* Handles request at path /hello */
@@ -23,36 +22,63 @@ public class HelloController {
 
     /* this handles requests at path /goodbye */
     @GetMapping("farewell")
-    @ResponseBody
     public String farewell()
     {
         return "Farewell, Spring";
     }
 
-    @GetMapping
-    @ResponseBody
-    public String test()
-    {
-        return "This is a test";
-    }
+//    @GetMapping
+//    public String test()
+//    {
+//        return "This is a test";
+//    }
 //    Handles request of the form /hello?name=LaunchCode
-    @GetMapping("hello")
-    @ResponseBody
-    public String helloWithQueryParam(@RequestParam String name)
+//    @GetMapping("hello")`//for get ONLY
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
+    public String helloWithQueryParam(@RequestParam String name, String friend)
     {
-        return "Hello, " + name + "!";
+        // friend added for 10.4 CYU question
+        return "Hello, " + name + " and " + friend + "!";
     }
 
 //    Handles requests of the form /hello/LaunchCode
 //    LaunchCode in this instance is now part of the path
-
-    @GetMapping("hello/{name}")
-    @ResponseBody
+//    @GetMapping("hello/{name}") // line 13 makes this redundance - dont need the hello
+    @GetMapping("{name}")
     public String helloWithPathParam(@PathVariable String name) {
         return "Hello, " + name + "!";
     }
 
-//    Check Your Understanding Questions
+//    @GetMapping("form")
+//    public String helloForm()
+//    {
+//        return "<html>" +
+//                "<body>" +
+//                "<form action='hello'>" + //submit a request to /hello
+//                "<input type='text' name='name'>" +
+//                "<input type='submit' value='Greet Me'>" +
+//                "</form>" +
+//                "</body>" +
+//                "</html>";
+//    }
+
+    // lives at hello/form
+    @GetMapping("form")
+    public String helloForm()
+    {
+        return "<html>" +
+                "<body>" +
+                "<form action='/hello' method='post'/>" + //submit a request to /hello
+                "<input type='text' name='name'/>" +
+                "<input type='submit' value='Greet Me'/>" +
+                "<input type='text' name='friend'/>" +
+                "<input type='submit' value='Friend'/>" +
+                "</form>" +
+                "</body>" +
+                "</html>";
+    }
+
+//    Check Your Understanding Questions 10.2
 //    @GetMapping("venus")
 //    @ResponseBody
 //    public String venusSurface(@RequestParam String terrestrial) {
